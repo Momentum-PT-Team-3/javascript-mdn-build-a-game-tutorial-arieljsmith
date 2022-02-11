@@ -2,23 +2,37 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-// Draw a square
-ctx.beginPath();
-ctx.rect(20, 40, 50, 50);
-ctx.fillStyle = "#FF0000";
-ctx.fill();
-ctx.closePath();
+// Define the variables to hold the starting position for our ball
+var x = canvas.width/2;
+var y = canvas.height-30;
 
-// Draw a circle
-ctx.beginPath();
-ctx.arc(240, 160, 20, 0, Math.PI*2, false);
-ctx.fillStyle = "green";
-ctx.fill();
-ctx.closePath();
+// Define variables that will add to x and y to give the ball the appearance of
+// movement
+var dx = 2;
+var dy = -2;
 
-// Draw a blue-stroked empty rectangle
-ctx.beginPath();
-ctx.rect(160, 10, 100, 40);
-ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
-ctx.stroke();
-ctx.closePath();
+// Function to draw the ball
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, 10, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
+
+// Function to clear the canvas, draw the ball calling the drawBall
+// function, and get the ball moving
+function draw() {
+    // Clear the canvas so movement doesn't leave a trail
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the ball
+    drawBall();
+
+    // Get the ball rolling...er, moving.
+    x += dx;
+    y += dy;
+}
+
+// Call draw() which also calls drawBall(); set draw interval
+setInterval(draw, 10);
