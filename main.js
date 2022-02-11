@@ -11,10 +11,13 @@ var y = canvas.height-30;
 var dx = 2;
 var dy = -2;
 
+// Define the ball radius to help with collision detection
+var ballRadius = 10;
+
 // Function to draw the ball
 function drawBall() {
     ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI*2);
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
@@ -32,6 +35,16 @@ function draw() {
     // Get the ball rolling...er, moving.
     x += dx;
     y += dy;
+
+    // Check if the ball is touching the bottom or top edges of the canvas
+    if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+        dy = -dy;
+    }
+
+    // Check if the ball is touching the right or left edges of the canvas
+    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
 }
 
 // Call draw() which also calls drawBall(); set draw interval
