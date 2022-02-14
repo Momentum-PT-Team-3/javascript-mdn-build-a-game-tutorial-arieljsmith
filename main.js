@@ -92,9 +92,20 @@ function draw() {
     drawBall();
     drawPaddle();
 
-    // Check if the ball is touching the bottom or top edges of the canvas
-    if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+    // Check if the ball is touching the bottom or top edges of the canvas.
+    // If it  hits the paddle, bounce. Otherwise if it touches the bottom edge
+    // of the canvas, it's game over.
+    if(y + dy < ballRadius) {
         dy = -dy;
+    } else if(y + dy > canvas.height-ballRadius) {
+        if(x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+        }
+        else {
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval);
+        }
     }
 
     // Check if the ball is touching the right or left edges of the canvas
@@ -128,8 +139,8 @@ function draw() {
 // M I S C E L L A N E O U S
 // ==========================================
 
-// Call draw() which also calls drawBall(); set draw interval
-setInterval(draw, 10);
+// Create a variable that calls draw() which also calls drawBall(); set draw interval
+var interval = setInterval(draw, 10);
 
 
 // ==========================================
