@@ -45,6 +45,9 @@ for(var c=0; c<brickColumnCount; c++) {
     }
 }
 
+// Score variable
+var score = 0;
+
 
 // ==========================================
 // K E Y U P / D O W N  E V E N T  L I S T E N E R S
@@ -79,7 +82,7 @@ function keyUpHandler(e) {
 
 
 // ==========================================
-// C O L L I S I O N  D E T E C T I O N  F U N C T I O N S
+// C O L L I S I O N  D E T E C T I O N  F U N C T I O N 
 // ==========================================
 
 function collisionDetection() {
@@ -90,6 +93,12 @@ function collisionDetection() {
                 if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
                     dy = -dy;
                     b.status = 0;
+                    score++;
+                    if(score == brickRowCount*brickColumnCount) {
+                        alert("YOU WIN, CONGRATULATIONS!");
+                        document.location.reload();
+                        clearInterval(interval);
+                    }
                 }
             }
         }
@@ -100,6 +109,13 @@ function collisionDetection() {
 // ==========================================
 // D R A W  F U N C T I O N S
 // ==========================================
+
+// Function to draw the score
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+score, 8, 20);
+}
 
 // Function to draw the ball
 function drawBall() {
@@ -144,10 +160,11 @@ function draw() {
     // Clear the canvas so movement doesn't leave a trail
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the ball, paddle, and bricks
+    // Draw the ball, paddle, bricks, and score
     drawBricks();
     drawBall();
     drawPaddle();
+    drawScore();
 
     // Activate collision detection
     collisionDetection();
