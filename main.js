@@ -53,9 +53,22 @@ var score = 0;
 // K E Y U P / D O W N  E V E N T  L I S T E N E R S
 // ==========================================
 
-// Listen for key presses
+// Listen for key presses or mouse movement
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+
+// ==========================================
+// M O U S E M O V E  F U N C T I O N S
+// ==========================================
+
+function mouseMoveHandler(e) {
+    var relativeX = e.clientX - canvas.offsetLeft;
+    if(relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth/2;
+    }
+}
 
 
 // ==========================================
