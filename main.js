@@ -48,6 +48,9 @@ for(var c=0; c<brickColumnCount; c++) {
 // Score variable
 var score = 0;
 
+// Lives variable
+var lives = 3;
+
 
 // ==========================================
 // K E Y U P / D O W N  E V E N T  L I S T E N E R S
@@ -110,7 +113,6 @@ function collisionDetection() {
                     if(score == brickRowCount*brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
                         document.location.reload();
-                        clearInterval(interval);
                     }
                 }
             }
@@ -128,6 +130,13 @@ function drawScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Score: "+score, 8, 20);
+}
+
+// Function to draw lives
+function drawLives() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
 }
 
 // Function to draw the ball
@@ -173,11 +182,12 @@ function draw() {
     // Clear the canvas so movement doesn't leave a trail
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the ball, paddle, bricks, and score
+    // Draw the ball, paddle, bricks, score, and lives
     drawBricks();
     drawBall();
     drawPaddle();
     drawScore();
+    drawLives();
 
     // Activate collision detection
     collisionDetection();
@@ -192,9 +202,18 @@ function draw() {
             dy = -dy;
         }
         else {
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval);
+            lives--;
+            if(!lives) {
+                alert("GAME OVER");
+                document.location.reload();
+            }
+            else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 2;
+                dy = -2;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
         }
     }
 
@@ -222,6 +241,9 @@ function draw() {
     x += dx;
     y += dy;
 
+    // Causes the draw() function to call itself over and over again:
+    requestAnimationFrame(draw);
+
 }
 
 
@@ -230,7 +252,7 @@ function draw() {
 // ==========================================
 
 // Create a variable that calls draw() which also calls drawBall(); set draw interval
-var interval = setInterval(draw, 10);
+draw();
 
 
 // ==========================================
