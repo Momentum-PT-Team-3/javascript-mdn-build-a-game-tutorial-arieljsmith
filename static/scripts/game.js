@@ -3,53 +3,60 @@
 // ==========================================
 
 // Store the canvas element and create the ctx variable to store rendering tool
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
+let canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
 
 // Define the ball radius to help with collision detection
-var ballRadius = 10;
+let ballRadius = 10;
 
 // Define the variables to hold the starting position for our ball
-var x = canvas.width/2;
-var y = canvas.height-30;
+let x = canvas.width/2;
+let y = canvas.height-30;
 
 // Define variables that will add to x and y to give the ball the appearance of
 // movement
-var dx = 2;
-var dy = -2;
+let dx = 2;
+let dy = -2;
 
 // Define the paddle to hit the ball
-var paddleHeight = 10;
-var paddleWidth = 75;
-var paddleX = (canvas.width-paddleWidth) / 2;
+let paddleHeight = 10;
+let paddleWidth = 75;
+let paddleX = (canvas.width-paddleWidth) / 2;
+
+// Define laser fire
+let laserHeight = 10;
+let laserWidth = 3;
+let laserX = 0;
+let laserY = 0;
 
 // Tracking button presses
-var rightPressed = false;
-var leftPressed = false;
+let rightPressed = false;
+let leftPressed = false;
+let spacePressed = false;
 
 // Brick variables
-var brickRowCount = 3;
-var brickColumnCount = 5;
-var brickWidth = 75;
-var brickHeight = 20;
-var brickPadding = 10;
-var brickOffsetTop = 30;
-var brickOffsetLeft = 30;
+let brickRowCount = 3;
+let brickColumnCount = 5;
+let brickWidth = 75;
+let brickHeight = 20;
+let brickPadding = 10;
+let brickOffsetTop = 30;
+let brickOffsetLeft = 30;
 
 // Handling the brick array
-var bricks = [];
-for(var c=0; c<brickColumnCount; c++) {
+let bricks = [];
+for(let c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
-    for(var r=0; r<brickRowCount; r++) {
+    for(let r=0; r<brickRowCount; r++) {
         bricks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }
 
 // Score variable
-var score = 0;
+let score = 0;
 
 // Lives variable
-var lives = 3;
+let lives = 3;
 
 
 // ==========================================
@@ -61,13 +68,16 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
+// Listen for any clicks
+document.addEventListener("keypress", keyPressHandler, false);
+
 
 // ==========================================
 // M O U S E M O V E  F U N C T I O N S
 // ==========================================
 
 function mouseMoveHandler(e) {
-    var relativeX = e.clientX - canvas.offsetLeft;
+    let relativeX = e.clientX - canvas.offsetLeft;
     if(relativeX > 0 && relativeX < canvas.width) {
         paddleX = relativeX - paddleWidth/2;
     }
@@ -102,9 +112,9 @@ function keyUpHandler(e) {
 // ==========================================
 
 function collisionDetection() {
-    for(var c=0; c<brickColumnCount; c++) {
-        for(var r=0; r<brickRowCount; r++) {
-            var b = bricks[c][r];
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = bricks[c][r];
             if(b.status == 1) {
                 if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
                     dy = -dy;
@@ -112,7 +122,8 @@ function collisionDetection() {
                     score++;
                     if(score == brickRowCount*brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
-                        document.location.reload();
+                        console.log(score);
+                        // document.location.reload();
                     }
                 }
             }
@@ -122,7 +133,7 @@ function collisionDetection() {
 
 
 // ==========================================
-// D R A W  F U N C T I O N S
+// D R A W  O B J E C T  F U N C T I O N S
 // ==========================================
 
 // Function to draw the score
@@ -157,13 +168,22 @@ function drawPaddle() {
     ctx.closePath();
 }
 
+// Function to draw laser beam
+function drawPewPew() {
+    ctx.beginPath();
+    ctx.rect(laserX, canvas.height/2, laserWidth, laserHeight);
+    ctx.fillStyle = "red";
+    ctx.fill();
+    ctx.closePath();
+}
+
 // Function to draw the bricks
 function drawBricks() {
-    for(var c=0; c<brickColumnCount; c++) {
-        for(var r=0; r<brickRowCount; r++) {
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
             if(bricks[c][r].status == 1) {
-                var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
-                var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+                let brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+                let brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
                 bricks[c][r].x = brickX;
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
@@ -175,6 +195,23 @@ function drawBricks() {
         }
     }
 }
+
+
+// ==========================================
+// K E Y P R E S S  F U N C T I O N S
+// ==========================================
+
+function keyPressHandler(e) {
+    if(e.keyCode == 32) {
+        spacePressed = true;
+        laserX = paddleX;
+    }
+}
+
+
+// ==========================================
+// M A I N  D R A W  F U N C T I O N S
+// ==========================================
 
 // Function to clear the canvas, draw the ball calling the drawBall
 // function, and get the ball moving
@@ -235,6 +272,12 @@ function draw() {
         if (paddleX < 0){
             paddleX = 0;
         }
+    }
+
+    // Check if the space has been pressed, and if so...fire???
+    if(spacePressed) {
+        drawPewPew();
+        // let laserX = PaddleX;
     }
 
     // Get the ball rolling...er, moving.
