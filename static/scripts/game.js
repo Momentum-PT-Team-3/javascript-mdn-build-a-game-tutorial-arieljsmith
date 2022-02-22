@@ -43,6 +43,9 @@ let brickPadding = 10;
 let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
 
+// define score form submission visibility
+let scoreFormVisible = false
+
 // Handling the brick array
 let bricks = [];
 for(let c=0; c<brickColumnCount; c++) {
@@ -122,6 +125,9 @@ function collisionDetection() {
                     score++;
                     if(score == brickRowCount*brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
+                        // this is where you win
+                        // make score form visible
+                        scoreFormVisible = true
                         console.log(score);
                         // document.location.reload();
                     }
@@ -242,6 +248,9 @@ function draw() {
             lives--;
             if(!lives) {
                 alert("GAME OVER");
+                // this is where you lose
+                // make score form visible
+                scoreFormVisible = true
                 document.location.reload();
             }
             else {

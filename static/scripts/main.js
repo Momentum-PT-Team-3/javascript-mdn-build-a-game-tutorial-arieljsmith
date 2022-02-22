@@ -19,6 +19,7 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
+
 // ==========================================
 // A D D  S C O R E
 // ==========================================
