@@ -257,7 +257,7 @@ function draw() {
                 alert("GAME OVER");
                 // this is where you lose
                 // make score form visible
-                console.log(document.location)
+                console.log(score)
                 // document.location.reload();
             }
             else {
@@ -301,9 +301,12 @@ function draw() {
     y += dy;
 
     // Causes the draw() function to call itself over and over again:
-
+    // Check to see if the game is over and the form is visible
+    if (!scoreFormVisible){
     requestAnimationFrame(draw);
-
+    } else {
+        console.log('paused')
+    }
 }
 
 
