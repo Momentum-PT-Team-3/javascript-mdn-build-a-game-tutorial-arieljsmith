@@ -13,6 +13,7 @@ def index(request):
 
 def ajax_create_score(request):
     if request.method == "POST":
+        # Django REST framework handles the below more elegantly, as a note
         score = request.POST.get('score')
         initials = request.POST.get('initials')
         new_score = Score.objects.get_or_create(points=score, player=initials)
