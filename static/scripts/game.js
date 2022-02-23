@@ -44,11 +44,7 @@ let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
 
 // define score form submission visibility
-<<<<<<< HEAD
-let scoreFormVisible = false
-=======
 let scoreFormVisible = false;
->>>>>>> main
 
 // Handling the brick array
 let bricks = [];
@@ -132,11 +128,8 @@ function collisionDetection() {
                         scoreForm.classList.remove('is-hidden')
                         console.log(score);
                         alert("YOU WIN, CONGRATULATIONS!");
-<<<<<<< HEAD
                         // this is where you win
                         // make score form visible
-=======
->>>>>>> main
                         console.log(document.location)
                         // document.location.reload();
                     }
