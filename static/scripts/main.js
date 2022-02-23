@@ -31,7 +31,7 @@ scoreForm.addEventListener('submit', function(event){
     event.preventDefault()
     console.log(event.target)
     formData = new FormData(scoreForm)
-    let score = 2
+    // TODO ppopulate with actual score
     formData.append('score', score)
     fetch(scoreURL, {
         method: 'POST',

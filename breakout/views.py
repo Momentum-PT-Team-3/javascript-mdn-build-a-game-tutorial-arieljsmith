@@ -21,3 +21,7 @@ def ajax_create_score(request):
         return JsonResponse(data, safe=False)
     else:
         return JsonResponse({'method': 'sup my guys, gals, and nonbinary pals'})
+
+def ajax_get_top_scores(request):
+    # top_scores = Score.objects.all().order_by('-points')[:5]
+    pass
