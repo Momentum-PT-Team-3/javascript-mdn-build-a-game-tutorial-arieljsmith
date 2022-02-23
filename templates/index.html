@@ -17,7 +17,7 @@
 
     <div class="box">
         <p>Score entry</p>
-        <form id='score-form' method="POST" enctype="multipart/form-data">
+        <form id='score-form' class='is-hidden' method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ score_form.as_p }}
                 <button type="submit" class="save btn btn-secondary">Submit</button>

@@ -10,8 +10,8 @@ let ctx = canvas.getContext("2d");
 let ballRadius = 10;
 
 // Define the variables to hold the starting position for our ball
-let x = canvas.width/2;
-let y = canvas.height-30;
+let x = canvas.width / 2;
+let y = canvas.height - 30;
 
 // Define variables that will add to x and y to give the ball the appearance of
 // movement
@@ -21,7 +21,7 @@ let dy = -2;
 // Define the paddle to hit the ball
 let paddleHeight = 10;
 let paddleWidth = 75;
-let paddleX = (canvas.width-paddleWidth) / 2;
+let paddleX = (canvas.width - paddleWidth) / 2;
 
 // Define laser fire
 let laserHeight = 10;
@@ -43,11 +43,14 @@ let brickPadding = 10;
 let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
 
+// define score form submission visibility
+let scoreFormVisible = false;
+
 // Handling the brick array
 let bricks = [];
-for(let c=0; c<brickColumnCount; c++) {
+for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
-    for(let r=0; r<brickRowCount; r++) {
+    for (let r = 0; r < brickRowCount; r++) {
         bricks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }
@@ -78,8 +81,8 @@ document.addEventListener("keypress", keyPressHandler, false);
 
 function mouseMoveHandler(e) {
     let relativeX = e.clientX - canvas.offsetLeft;
-    if(relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth/2;
+    if (relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth / 2;
     }
 }
 
@@ -89,19 +92,19 @@ function mouseMoveHandler(e) {
 // ==========================================
 
 function keyDownHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight") {
+    if (e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
     }
-    else if(e.key == "Left" || e.key == "ArrowLeft") {
+    else if (e.key == "Left" || e.key == "ArrowLeft") {
         leftPressed = true;
     }
 }
 
 function keyUpHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight") {
+    if (e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = false;
     }
-    else if(e.key == "Left" || e.key == "ArrowLeft") {
+    else if (e.key == "Left" || e.key == "ArrowLeft") {
         leftPressed = false;
     }
 }
@@ -112,17 +115,20 @@ function keyUpHandler(e) {
 // ==========================================
 
 function collisionDetection() {
-    for(let c=0; c<brickColumnCount; c++) {
-        for(let r=0; r<brickRowCount; r++) {
+    for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
             let b = bricks[c][r];
-            if(b.status == 1) {
-                if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+            if (b.status == 1) {
+                if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
                     dy = -dy;
                     b.status = 0;
                     score++;
-                    if(score == brickRowCount*brickColumnCount) {
-                        alert("YOU WIN, CONGRATULATIONS!");
+                    if (score == brickRowCount * brickColumnCount) {
+                        scoreFormVisible = true
+                        scoreForm.classList.remove('is-hidden')
                         console.log(score);
+                        alert("YOU WIN, CONGRATULATIONS!");
+                        console.log(document.location)
                         // document.location.reload();
                     }
                 }
@@ -140,20 +146,20 @@ function collisionDetection() {
 function drawScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
-    ctx.fillText("Score: "+score, 8, 20);
+    ctx.fillText("Score: " + score, 8, 20);
 }
 
 // Function to draw lives
 function drawLives() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
-    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+    ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
 }
 
 // Function to draw the ball
 function drawBall() {
     ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
@@ -162,7 +168,7 @@ function drawBall() {
 // Function to draw the paddle
 function drawPaddle() {
     ctx.beginPath();
-    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
@@ -171,7 +177,7 @@ function drawPaddle() {
 // Function to draw laser beam
 function drawPewPew() {
     ctx.beginPath();
-    ctx.rect(laserX, canvas.height/2, laserWidth, laserHeight);
+    ctx.rect(laserX, canvas.height / 2, laserWidth, laserHeight);
     ctx.fillStyle = "red";
     ctx.fill();
     ctx.closePath();
@@ -179,11 +185,11 @@ function drawPewPew() {
 
 // Function to draw the bricks
 function drawBricks() {
-    for(let c=0; c<brickColumnCount; c++) {
-        for(let r=0; r<brickRowCount; r++) {
-            if(bricks[c][r].status == 1) {
-                let brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
-                let brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+    for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+            if (bricks[c][r].status == 1) {
+                let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+                let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
                 bricks[c][r].x = brickX;
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
@@ -202,7 +208,7 @@ function drawBricks() {
 // ==========================================
 
 function keyPressHandler(e) {
-    if(e.keyCode == 32) {
+    if (e.keyCode == 32) {
         spacePressed = true;
         laserX = paddleX;
     }
@@ -216,6 +222,8 @@ function keyPressHandler(e) {
 // Function to clear the canvas, draw the ball calling the drawBall
 // function, and get the ball moving
 function draw() {
+    console.log(scoreFormVisible)
+
     // Clear the canvas so movement doesn't leave a trail
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -232,50 +240,53 @@ function draw() {
     // Check if the ball is touching the bottom or top edges of the canvas.
     // If it  hits the paddle, bounce. Otherwise if it touches the bottom edge
     // of the canvas, it's game over.
-    if(y + dy < ballRadius) {
+    if (y + dy < ballRadius) {
         dy = -dy;
-    } else if(y + dy > canvas.height-ballRadius) {
-        if(x > paddleX && x < paddleX + paddleWidth) {
+    } else if (y + dy > canvas.height - ballRadius) {
+        if (x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy;
         }
         else {
             lives--;
-            if(!lives) {
+            if (!lives) {
+                scoreFormVisible = true
+                scoreForm.classList.remove('is-hidden')
                 alert("GAME OVER");
-                document.location.reload();
+                console.log(document.location)
+                // document.location.reload();
             }
             else {
-                x = canvas.width/2;
-                y = canvas.height-30;
+                x = canvas.width / 2;
+                y = canvas.height - 30;
                 dx = 2;
                 dy = -2;
-                paddleX = (canvas.width-paddleWidth)/2;
+                paddleX = (canvas.width - paddleWidth) / 2;
             }
         }
     }
 
     // Check if the ball is touching the right or left edges of the canvas
-    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
         dx = -dx;
     }
 
     // Check if the cursor keys are pressed; if so, move accordingly
     // within the bounds of the canvas
-    if(rightPressed) {
+    if (rightPressed) {
         paddleX += 7;
-        if (paddleX + paddleWidth > canvas.width){
+        if (paddleX + paddleWidth > canvas.width) {
             paddleX = canvas.width - paddleWidth;
         }
     }
-    else if(leftPressed) {
+    else if (leftPressed) {
         paddleX -= 7;
-        if (paddleX < 0){
+        if (paddleX < 0) {
             paddleX = 0;
         }
     }
 
     // Check if the space has been pressed, and if so...fire???
-    if(spacePressed) {
+    if (spacePressed) {
         drawPewPew();
         // let laserX = PaddleX;
     }
@@ -285,7 +296,11 @@ function draw() {
     y += dy;
 
     // Causes the draw() function to call itself over and over again:
-    requestAnimationFrame(draw);
+    if (!scoreFormVisible) {
+        requestAnimationFrame(draw);
+    } else {
+        console.log('paused')
+    }
 
 }
 

@@ -48,4 +48,5 @@ scoreForm.addEventListener('submit', function(event){
     .then(data => {
         console.log(data)
     })
+    document.location.reload()
 })
