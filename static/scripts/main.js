@@ -50,3 +50,31 @@ scoreForm.addEventListener('submit', function(event){
     })
     document.location.reload()
 })
+
+
+// ==========================================
+// D I S P L A Y  L E A D E R B O A R D
+// ==========================================
+
+let leaderBoard = document.querySelector("#leader-board")
+let leaderURL = "api/leaderboard"
+
+fetch(leaderURL, {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers:{
+        'Accept': 'application/json',
+        'X-Request-With': 'XMLHttpRequest',
+        'X-CSRFToken': csrftoken,
+    },
+})
+.then(response => {
+    return response.json()
+})
+.then(leaderArray => {
+    for (let score of leaderArray){
+        let playerScore = document.createElement('tr')
+        playerScore.innerText = `${score.fields.player} | ${score.fields.points}`
+        leaderBoard.appendChild(playerScore)
+    }
+})

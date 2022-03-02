@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='home'),
     path('api/score/new', views.ajax_create_score, name='ajax_create_score'),
+    path('api/leaderboard/', views.ajax_get_top_scores, name="ajax-get-leaders"),
 ]
